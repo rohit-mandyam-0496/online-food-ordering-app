@@ -1,110 +1,113 @@
-console.log("script.js is connected!");
 // Global Variables
-let cart = [];
-let menuItems = [];
+let menuData = [];
 
 // Function to Fetch Menu Data
-async function fetchMenuItems() {
-    try {
-        const response = await fetch("menu.json");
-        if (!response.ok) {
-            throw new Error("Failed to load menu data");
-        }
-        menuItems = await response.json();
-        displayMenuItems("Burgers");
-    } catch (error) {
-        console.error("Error fetching menu data:", error);
+async function fetchMenuData() {
+  try {
+    const response = await fetch("menu.json"); // Ensure menu.json exists in the correct folder
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
     }
+    menuData = await response.json();
+    console.log("Menu data loaded:", menuData); // Debugging
+    loadMenu("Burgers");
+    // loadMenu("Pizzas");
+    // loadMenu("Drinks");
+  } catch (error) {
+    console.error("Error fetching menu data:", error);
+  }
 }
 
-// Function to Display Menu Items Based on Category
-function displayMenuItems(category) {
-    const menuContainer = document.querySelector("#menu-items .row");
-    menuContainer.innerHTML = "";
+// Function to Load Menu Items Based on Category
+function loadMenu(category) {
+  const menuContainer = document.querySelector("#menu-items .row");
+  if (!menuContainer) return; // Prevents errors on pages without menu sections
+  menuContainer.innerHTML = ""; // Clear previous items
 
-    const filteredItems = menuItems.filter(item => item.category === category);
-    if (filteredItems.length === 0) {
-        menuContainer.innerHTML = "<p>No items found for this category.</p>";
-        return;
-    }
+  console.log("Loading menu for category:", category); // Debugging
 
-    filteredItems.forEach(item => {
-        const menuItem = document.createElement("div");
-        menuItem.classList.add("col-md-4", "mb-3");
+  const filteredItems = menuData.filter((item) => item.category === category);
+  if (filteredItems.length === 0) {
+    menuContainer.innerHTML = "<p>No items found for this category.</p>";
+    return;
+  }
 
-        menuItem.innerHTML = `
+  filteredItems.forEach((item) => {
+    const menuItem = document.createElement("div");
+    menuItem.classList.add("col-md-4", "mb-3");
+
+    menuItem.innerHTML = `
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">${item.name}</h5>
-                    <p class="card-text">$${item.price.toFixed(2)}</p>
-                    <button class="btn btn-primary add-to-cart" data-id="${item.id}">Add to Cart</button>
+                    <p class="card-text">Rs. ${item.price.toFixed(2)}</p>
+                    <button class="btn btn-primary add-to-cart" data-id="${
+                      item.id
+                    }">Add to Cart</button>
                 </div>
             </div>
         `;
-        menuContainer.appendChild(menuItem);
-    });
+    menuContainer.appendChild(menuItem);
+  });
 
-    document.querySelectorAll(".add-to-cart").forEach(button => {
-        button.addEventListener("click", (e) => {
-            const itemId = parseInt(e.target.getAttribute("data-id"));
-            addItemToCart(itemId);
-        });
+  // Add event listeners to "Add to Cart" buttons
+  document.querySelectorAll(".add-to-cart").forEach((button) => {
+    button.addEventListener("click", (e) => {
+      const itemId = parseInt(e.target.getAttribute("data-id"));
+      addToCart(itemId);
     });
+  });
 }
 
 // Function to Add Items to Cart
-function addItemToCart(itemId) {
-    const item = menuItems.find(item => item.id === itemId);
-    if (item) {
-        cart.push(item);
-        updateCartDisplay();
-    }
+function addToCart(itemId) {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const item = menuData.find((item) => item.id === itemId);
+
+  if (!item) {
+    console.error("Item not found in menuData:", itemId);
+    return;
+  }
+
+  let existingItem = cart.find((cartItem) => cartItem.id === itemId);
+  if (existingItem) {
+    existingItem.quantity += 1;
+  } else {
+    cart.push({ ...item, quantity: 1 });
+  }
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+  updateCartCount();
+  alert(`${item.name} added to cart!`);
 }
 
-// Function to Update the Cart Display
-function updateCartDisplay() {
-    const cartContainer = document.getElementById("cart");
-    cartContainer.innerHTML = `
-        <h2>Your Cart</h2>
-        ${cart.length === 0 ? "<p>No items in cart.</p>" : ""}
-    `;
-
-    const cartList = document.createElement("ul");
-    cartList.classList.add("list-group");
-
-    cart.forEach((item, index) => {
-        const cartItem = document.createElement("li");
-        cartItem.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-center");
-        cartItem.innerHTML = `
-            ${item.name} - $${item.price.toFixed(2)}
-            <button class="btn btn-sm btn-danger remove-from-cart" data-index="${index}">Remove</button>
-        `;
-        cartList.appendChild(cartItem);
-    });
-
-    cartContainer.appendChild(cartList);
-
-    document.querySelectorAll(".remove-from-cart").forEach(button => {
-        button.addEventListener("click", (e) => {
-            const itemIndex = parseInt(e.target.getAttribute("data-index"));
-            removeItemFromCart(itemIndex);
-        });
-    });
+// Function to Update Cart Count in Navbar
+function updateCartCount() {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  document.getElementById("cart-count").textContent = cart.length;
 }
 
-// Function to Remove Items from Cart
-function removeItemFromCart(index) {
-    cart.splice(index, 1);
-    updateCartDisplay();
+// Function to Remove Items from Cart (Used in cart.js)
+function removeFromCart(index) {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  cart.splice(index, 1);
+  localStorage.setItem("cart", JSON.stringify(cart));
+  updateCartCount();
 }
 
 // Event Listeners for Category Buttons
-document.querySelectorAll("#food-categories .btn").forEach(button => {
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll("#food-categories .btn").forEach((button) => {
     button.addEventListener("click", (e) => {
-        const category = e.target.textContent;
-        displayMenuItems(category);
+      const category = e.target.textContent.trim();
+      console.log("Category clicked:", category); // Debugging
+      loadMenu(category);
     });
+  });
 });
 
-// Fetch menu data and initialize
-fetchMenuItems();
+// Fetch Menu Data and Initialize the Page
+document.addEventListener("DOMContentLoaded", function () {
+  fetchMenuData();
+  updateCartCount();
+});

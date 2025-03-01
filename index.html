@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <title>Online Food Ordering App</title>
     <!-- Link to Bootstrap CSS for styling -->
     <link
@@ -15,19 +16,58 @@
   <body>
     <!-- Link to JavaScript -->
     <script src="script.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const username = sessionStorage.getItem("loggedInUser");
+        const userGreeting = document.getElementById("userGreeting");
+        const logoutBtn = document.getElementById("logoutBtn");
+        const loginRegisterBtn = document.getElementById("loginRegisterBtn");
+
+        if (username) {
+          userGreeting.textContent = "Hello, " + username;
+          logoutBtn.style.display = "inline";
+          loginRegisterBtn.style.display = "none";
+        }
+
+        logoutBtn.addEventListener("click", function () {
+          sessionStorage.removeItem("loggedInUser");
+          alert("Logged out successfully.");
+          window.location.href = "index.html";
+        });
+      });
+    </script>
     <!-- Header -->
     <header class="bg-dark text-white p-3">
       <nav class="container d-flex justify-content-between">
-        <h1 class="h4">Foodie</h1>
+        <h1 class="h4">Motato</h1>
         <ul class="nav">
           <li class="nav-item">
-            <a href="#" class="nav-link text-white">Home</a>
+            <a href="index.html" class="nav-link text-white">Home</a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link text-white">Cart</a>
+            <a href="cart.html" class="nav-link text-white"
+              >Cart (<span id="cart-count">0</span>)</a
+            >
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link text-white">Profile</a>
+            <span id="userGreeting" class="nav-link text-white"></span>
+          </li>
+          <li class="nav-item">
+            <a
+              id="logoutBtn"
+              href="#"
+              class="nav-link text-white"
+              style="display: none"
+              >Logout</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              id="loginRegisterBtn"
+              href="login.html"
+              class="nav-link text-white"
+              >Login / Register</a
+            >
           </li>
         </ul>
       </nav>
@@ -67,7 +107,7 @@
 
     <!-- Footer -->
     <footer class="bg-dark text-white text-center p-3 mt-4">
-      <p>&copy; 2024 Foodie. All rights reserved.</p>
+      <p>&copy; 2025 Foodie. All rights reserved.</p>
     </footer>
   </body>
 </html>
