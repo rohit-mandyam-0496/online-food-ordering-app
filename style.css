@@ -1,0 +1,63 @@
+/* General Styles */
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+}
+
+/* Header Styles */
+header {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+/* Food Categories */
+#food-categories h2 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+#food-categories .btn {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+/* Menu Items */
+#menu-items h2 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+/* Cart Section */
+#cart {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+#cart h2 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+/* Footer Styles */
+footer {
+  font-size: 0.9rem;
+  margin-top: 2rem;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  #food-categories .btn {
+    font-size: 0.9rem;
+  }
+
+  header h1 {
+    font-size: 1.2rem;
+  }
+}

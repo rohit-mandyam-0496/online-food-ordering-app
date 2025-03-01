@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Online Food Ordering App</title>
+    <!-- Link to Bootstrap CSS for styling -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Link to custom CSS -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Link to JavaScript -->
+    <script src="script.js"></script>
+    <!-- Header -->
+    <header class="bg-dark text-white p-3">
+      <nav class="container d-flex justify-content-between">
+        <h1 class="h4">Foodie</h1>
+        <ul class="nav">
+          <li class="nav-item">
+            <a href="#" class="nav-link text-white">Home</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link text-white">Cart</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link text-white">Profile</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- Main Section -->
+    <main class="container mt-4">
+      <section id="food-categories">
+        <h2>Food Categories</h2>
+        <div class="row">
+          <div class="col-md-4">
+            <button class="btn btn-outline-primary w-100">Burgers</button>
+          </div>
+          <div class="col-md-4">
+            <button class="btn btn-outline-primary w-100">Pizzas</button>
+          </div>
+          <div class="col-md-4">
+            <button class="btn btn-outline-primary w-100">Drinks</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="menu-items" class="mt-4">
+        <h2>Menu</h2>
+        <div class="row">
+          <!-- Menu items will be dynamically loaded here -->
+          <p>Loading menu items...</p>
+        </div>
+      </section>
+    </main>
+
+    <!-- Cart Section -->
+    <aside id="cart" class="bg-light p-3 mt-4">
+      <h2>Your Cart</h2>
+      <p>No items in cart.</p>
+    </aside>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center p-3 mt-4">
+      <p>&copy; 2024 Foodie. All rights reserved.</p>
+    </footer>
+  </body>
+</html>
